@@ -1,31 +1,48 @@
 package com.example.androidapplication;
-public abstract class BaseTimer {
-    private int hour;
-    private int min;
-    private int sec;
+import java.util.Timer;
+import java.util.TimerTask;
+public class BaseTimer{
+    private boolean isRunning = false;
+    private int seconds = 10;
+    private Timer timer;
+    private TimerTask task;
 
-    private boolean isRunning;
-    public Timer(){
-        this.hour = 0;
-        this.min = 0;
-        this.sec = 0;
-        isRunning = false;
+    public BaseTimer(int initialSeconds){
+        this.seconds = intialSeconds;
     }
+        public void start() {
+            if (isRunning){ return;
+            }
+            isRunning = true;
+            timer = new Timer();
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    if (seconds > 0) {
+                        System.out.print(seconds);
+                        seconds--;
+                    } else {
+                        timer.cancel();
+                        isRunning = false;
+                        System.out.print("Done");
+                    }
+                }
+            };
 
-    public timeMoves(){
-
+                    timer.schedule(task, 1000, 1000);
     }
-
-    public void start() {
-        isRunning = true;
+        public static void pause(){
+            if (isRunning && timer != null) {
+                timer.cancel();
+                isRunning = false;
+                System.out.println("Paused");
+            }
     }
-
-    public void pause(){
-        isRunning = false;
-
-    }
-    public void reset(){
-        isRunning = true;
-    }
-
+        public static void reset(int newSeconds){
+            pause();
+            this.seconds = newSeconds;
+            System.out.println("Timer Reset");
 }
+        public int getRemainingSeconds () {
+            return seconds;
+        }
