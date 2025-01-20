@@ -1,30 +1,23 @@
-import android.os.Bundle
+package com.example.androidapplication
 
-class MainActivity : ComponentActivity() {
-    private var timer: BaseTimer? = null
+import BaseTimer
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+object Main {
+    @Throws(InterruptedException::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val timer = BaseTimer(10) //
 
-        // Initialize and start the timer
-        timer = BaseTimer(10)
-        timer?.start()
+        timer.start()
+        Thread.sleep(5000)
 
-        setContent {
-            AndroidApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Gage",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
+        BaseTimer.pause()
+        Thread.sleep(2000)
 
-    override fun onDestroy() {
-        super.onDestroy()
-        timer?.stop() // Stop the timer when the activity is destroyed
+        timer.start()
+        Thread.sleep(3000)
+
+        timer.reset(15)
+        timer.start()
     }
 }

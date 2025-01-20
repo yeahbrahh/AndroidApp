@@ -1,48 +1,52 @@
-package com.example.androidapplication;
-import java.util.Timer;
-import java.util.TimerTask;
-public class BaseTimer{
-    private boolean isRunning = false;
-    private int seconds = 10;
-    private Timer timer;
-    private TimerTask task;
+import java.util.Timer
+import java.util.TimerTask
 
-    public BaseTimer(int initialSeconds){
-        this.seconds = intialSeconds;
-    }
-        public void start() {
-            if (isRunning){ return;
-            }
-            isRunning = true;
-            timer = new Timer();
-            task = new TimerTask() {
-                @Override
-                public void run() {
-                    if (seconds > 0) {
-                        System.out.print(seconds);
-                        seconds--;
-                    } else {
-                        timer.cancel();
-                        isRunning = false;
-                        System.out.print("Done");
-                    }
-                }
-            };
+class BaseTimer(initialSeconds: Int) {
+    var remainingSeconds: Int = 10
+        private set
 
-                    timer.schedule(task, 1000, 1000);
+    init {
+        this.remainingSeconds = initialSeconds
     }
-        public static void pause(){
-            if (isRunning && timer != null) {
-                timer.cancel();
-                isRunning = false;
-                System.out.println("Paused");
-            }
-    }
-        public static void reset(int newSeconds){
-            pause();
-            this.seconds = newSeconds;
-            System.out.println("Timer Reset");
-}
-        public int getRemainingSeconds () {
-            return seconds;
+
+    fun start() {
+        if (isRunning) {
+            return
         }
+        isRunning = true
+        timer = Timer()
+        val task: TimerTask = object : TimerTask() {
+            override fun run() {
+                if (this@BaseTimer.remainingSeconds > 0) {
+                    println(this@BaseTimer.remainingSeconds)
+                    this@BaseTimer.remainingSeconds--
+                } else {
+                    timer!!.cancel()
+                    isRunning = false
+                    println("Done")
+                }
+            }
+        }
+
+        timer!!.schedule(task, 1000, 1000)
+    }
+
+    fun reset(newSeconds: Int) {
+        pause()
+        this.remainingSeconds = newSeconds
+        println("Timer Reset")
+    }
+
+    companion object {
+        private var isRunning = false
+        private var timer: Timer? = null
+
+        fun pause() {
+            if (isRunning && timer != null) {
+                timer!!.cancel()
+                isRunning = false
+                println("Paused")
+            }
+        }
+    }
+}
